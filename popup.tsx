@@ -50,7 +50,7 @@ function IndexPopup() {
                                   value={pageDesc}
                     />
                 </Form.Group>
-                <Button type="submit" style={{marginTop: 5}}>Save to NewsHub</Button>
+                <Button className="submitBtn" type="submit">Save to NewsHub</Button>
             </Form>
             <a href="/options.html" target="_blank"><Gear/></a>
         </Container>
