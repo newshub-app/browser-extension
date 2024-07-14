@@ -4,14 +4,19 @@
   "version": "0.0.1",
   "description": "Save pages to a NewsHub instance while browsing.",
   "author": "Mathieu Deous",
+  "private": true,
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.6.2",
+    "bootstrap": "^5.3.3",
     "plasmo": "0.88.0",
     "react": "18.2.0",
+    "react-bootstrap": "^2.10.4",
+    "react-bootstrap-icons": "^1.11.4",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
@@ -24,8 +29,8 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "host_permissions": [
-      "https://*/*"
+    "permissions": [
+      "activeTab"
     ]
   }
 }
