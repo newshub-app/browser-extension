@@ -1,42 +1,58 @@
 import {useEffect, useState} from "react"
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import {sendToContentScript} from "~node_modules/@plasmohq/messaging";
+import {sendToContentScript} from "@plasmohq/messaging"
+import Button from "react-bootstrap/Button"
+import Container from "react-bootstrap/Container"
+import Form from "react-bootstrap/Form"
+import {Gear} from "react-bootstrap-icons"
 
 import "bootstrap/dist/css/bootstrap.css"
+import "~styles.css"
 
 function IndexPopup() {
-    const [pageUrl, setPageUrl] = useState<string>("no-url")
-    const [pageTitle, setPageTitle] = useState<string>("no-title")
-    const [pageDesc, setPageDesc] = useState<string>("no-desc")
+    const [pageUrl, setPageUrl] = useState<string>("")
+    const [pageTitle, setPageTitle] = useState<string>("")
+    const [pageDesc, setPageDesc] = useState<string>("")
 
     useEffect(() => {
-        console.log("requesting page info from content script")
-        sendToContentScript({name: "pageinfo"}
-        ).then(resp => {
-                console.log("page info received")
-                console.log(resp)
-                setPageUrl(resp.url)
-                setPageTitle(resp.title)
-                setPageDesc(resp.description)
-            }
-        ).catch(err => {
+        sendToContentScript({
+            name: "pageinfo"
+        }).then(resp => {
+            setPageUrl(resp.url)
+            setPageTitle(resp.title)
+            setPageDesc(resp.description)
+        }).catch(err => {
             console.error("error getting page info:", err)
         })
     }, [])
 
     return (
-        <Container style={{padding: 10}}>
+        <Container>
+            <h3>Add to NewsHub</h3>
             <Form>
-                <label htmlFor="#urlfield">URL</label>
-                <input id={"urlField"} onChange={(e) => setPageUrl(e.target.value)} value={pageUrl}/>
-                <label htmlFor="#titleField">Title</label>
-                <input id={"titleField"} onChange={(e) => setPageTitle(e.target.value)} value={pageTitle}/>
-                <label htmlFor="#descField">Description</label>
-                <input id={"descField"} onChange={(e) => setPageDesc(e.target.value)} value={pageDesc}/>
-                <Button type={"submit"} style={{marginTop: 5}}>Save to NewsHub</Button>
+                <Form.Group controlId="urlField">
+                    <Form.Label>URL</Form.Label>
+                    <Form.Control type="text"
+                                  onChange={(e) => setPageUrl(e.target.value)}
+                                  value={pageUrl}
+                    />
+                </Form.Group>
+                <Form.Group controlId="titleField">
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text"
+                                  onChange={(e) => setPageTitle(e.target.value)}
+                                  value={pageTitle}
+                    />
+                </Form.Group>
+                <Form.Group controlId="descField">
+                    <Form.Label>Description</Form.Label>s
+                    <Form.Control type="text"
+                                  onChange={(e) => setPageDesc(e.target.value)}
+                                  value={pageDesc}
+                    />
+                </Form.Group>
+                <Button type="submit" style={{marginTop: 5}}>Save to NewsHub</Button>
             </Form>
+            <a href="/options.html" target="_blank"><Gear/></a>
         </Container>
     )
 }
