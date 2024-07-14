@@ -1,12 +1,13 @@
+* {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 .container {
     margin: 5px auto;
     min-width: 30em;
 }
 .submitBtn {
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
-input {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
+
