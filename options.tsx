@@ -1,26 +1,26 @@
 import {useState} from "react";
 import {useStorage} from "@plasmohq/storage/hook";
+
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Stack from "react-bootstrap/Stack";
+
+import {Settings} from "~types";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "~styles.css";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-
-interface Settings {
-    api_url: string
-    api_token: string
-}
 
 const OptionsPage = () => {
     const [formValid, setFormValid] = useState<boolean>(false);
     const [settings, _setsettings, {
         setRenderValue,
-        setStoreValue
+        setStoreValue,
+        remove
     }] = useStorage<Settings>(
         "settings",
-        {"api_url": "", "api_token": ""}
+        new Settings()
     );
 
     const handleChange = (e) => {
@@ -41,6 +41,12 @@ const OptionsPage = () => {
         setStoreValue(settings).catch(err => {console.error(err)})
         setFormValid(true)
         e.preventDefault()
+    }
+
+    const handleClearSettings = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        remove()
     }
 
     return (
@@ -68,7 +74,7 @@ const OptionsPage = () => {
                     >
                         <Form.Control name="api_token"
                                       type="text"
-                                      pattern="[a-f0-9]{32}"
+                                      pattern="[a-f0-9]{40}"
                                       value={settings.api_token}
                                       onChange={handleChange}
                                       required
@@ -78,7 +84,11 @@ const OptionsPage = () => {
                         Please enter a valid API token
                     </Form.Control.Feedback>
                 </Form.Group>
-                <Button className="submitBtn" type="submit">Save</Button>
+                <Stack direction="horizontal">
+                    <Button className="submitBtn" type="submit">Save</Button>
+                    {/* FIXME: when clearing settings the page goes blank */}
+                    <Button className="submitBtn ms-auto btn-danger" type="button" onClick={handleClearSettings}>Clear settings</Button>
+                </Stack>
             </Form>
         </Container>
     );

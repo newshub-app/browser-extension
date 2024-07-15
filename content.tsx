@@ -1,12 +1,6 @@
 import {useMessage} from "@plasmohq/messaging/dist/hook"
 
-const UNKNOWN = "unknown"
-
-interface PageInfo {
-    url: string,
-    title?: string,
-    description?: string
-}
+import type {PageInfo} from "~types";
 
 const ContentScriptHandler = () => {
     useMessage<string, PageInfo>(async (req, res) => {
