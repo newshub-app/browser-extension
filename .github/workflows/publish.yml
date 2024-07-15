@@ -1,0 +1,37 @@
+name: "Publish Extension on Web Stores"
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: 22.x
+          cache: yarn
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v5.0.0
+        with:
+          cmd: install
+
+      - name: Build extension
+        uses: borales/actions-yarn@v5.0.0
+        with:
+          cmd: run build
+
+      - name: Package extension
+        uses: borales/actions-yarn@v5.0.0
+        with:
+          cmd: run package
+
+      - name: Publish extension
+        uses: PlasmoHQ/bpp@v3.6.1
+        with:
+          keys: ${{ secrets.SUBMIT_KEYS }}
+          artifact: build/chrome-mv3-prod.zip
