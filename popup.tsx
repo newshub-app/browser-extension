@@ -11,7 +11,7 @@ import {Gear} from "react-bootstrap-icons"
 
 import NewsHubAPI, {type ApiResponse, type Category} from "~newshub";
 import type {PageInfo} from "~types";
-import {Settings} from "~types";
+import {type Settings} from "~types";
 
 import "bootstrap/dist/css/bootstrap.css"
 import "~styles.css"
@@ -24,7 +24,7 @@ function IndexPopup() {
     const [isConfigured, setConfigured] = useState<boolean>(false)
     const [settings] = useStorage<Settings>(
         "settings",
-        new Settings()
+        {api_url: "", api_token: ""}
     );
 
     // load settings
@@ -40,7 +40,7 @@ function IndexPopup() {
         }
     }, [settings]);
 
-    // load page info and categories on first render
+    // load page info and categories
     useEffect(() => {
         if (isConfigured) {
             const api = new NewsHubAPI(settings.api_url, settings.api_token)

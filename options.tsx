@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Stack from "react-bootstrap/Stack";
 
-import {Settings} from "~types";
+import {type Settings} from "~types";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "~styles.css";
@@ -20,7 +20,7 @@ const OptionsPage = () => {
         remove
     }] = useStorage<Settings>(
         "settings",
-        new Settings()
+        {api_url: "", api_token: ""}
     );
 
     const handleChange = (e) => {
@@ -38,7 +38,9 @@ const OptionsPage = () => {
             e.preventDefault()
             e.stopPropagation()
         }
-        setStoreValue(settings).catch(err => {console.error(err)})
+        setStoreValue(settings).catch(err => {
+            console.error(err)
+        })
         setFormValid(true)
         e.preventDefault()
     }
@@ -87,7 +89,8 @@ const OptionsPage = () => {
                 <Stack direction="horizontal">
                     <Button className="submitBtn" type="submit">Save</Button>
                     {/* FIXME: when clearing settings the page goes blank */}
-                    <Button className="submitBtn ms-auto btn-danger" type="button" onClick={handleClearSettings}>Clear settings</Button>
+                    <Button className="submitBtn ms-auto btn-danger" type="button" onClick={handleClearSettings}>Clear
+                        settings</Button>
                 </Stack>
             </Form>
         </Container>
