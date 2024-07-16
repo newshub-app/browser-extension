@@ -28,6 +28,8 @@ export class NewsHubAPI {
     }
 
     private async request(endpoint: string, method: string = "GET", data: object = null) {
+        console.log(method)
+        console.log(JSON.stringify(data))
         const request : RequestInit = {
             method: method,
             headers: {
@@ -36,20 +38,21 @@ export class NewsHubAPI {
             },
             body: data === null ? null : JSON.stringify(data)
         }
+        console.log(request)
         const response = await fetch(`${this.apiUrl}${endpoint}`, request)
         return await response.json();
     }
 
     async getCategories() : Promise<ApiResponse<Category>> {
-        return this.request("/category");
+        return this.request("/category/");
     }
 
     async getLinks() : Promise<ApiResponse<Link>> {
-        return this.request("/link");
+        return this.request("/link/");
     }
 
     async submitLink(link: Link) {
-        return this.request("/link", "POST", link);
+        return this.request("/link/", "POST", link);
     }
 }
 
