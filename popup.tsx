@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import {type FormEvent, useEffect, useState} from "react"
 import {sendToContentScript} from "@plasmohq/messaging"
 import {useStorage} from "@plasmohq/storage/dist/hook";
 
@@ -33,10 +33,8 @@ function IndexPopup() {
     // load settings
     useEffect(() => {
         if (settings.api_url === "" || settings.api_token === "") {
-            if (isConfigured) {
-                setConfigured(false)
-                setCategories([])
-            }
+            setConfigured( false)
+            setCategories([])
             console.warn("Extension is not configured. Please set the API URL and token in the settings.")
         } else {
             setConfigured(true)
@@ -46,12 +44,19 @@ function IndexPopup() {
     // load page info and categories
     useEffect(() => {
         if (isConfigured) {
-            const api = new NewsHubAPI(settings.api_url, settings.api_token)
-            api.getCategories().then((resp: ApiResponse<Category>) => {
-                setCategories(resp.results)
-            }).catch(err => {
-                console.error("Error getting categories:", err)
-            })
+            const fetchCategories = async () => {
+                const api = new NewsHubAPI(settings.api_url, settings.api_token)
+                try {
+                    const resp = await api.getCategories()
+                    setCategories(resp.results)
+                } catch (err) {
+                    // FIXME: failure handling block never gets executed
+                    console.error("Error fetching categories:", err)
+                    setConfigured(false)
+                }
+            }
+            fetchCategories().then(() => null)
+
 
             sendToContentScript({
                 name: "pageinfo"
@@ -65,19 +70,22 @@ function IndexPopup() {
         }
     }, [isConfigured])
 
-    const handleSubmit = (e) => {
+    const  handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         const newshub = new NewsHubAPI(settings.api_url, settings.api_token)
-        newshub.submitLink({
-            url: pageUrl,
-            title: pageTitle,
-            description: pageDesc,
-            category: e.currentTarget.category.value
-        }).then((link) => {
-            setShowCreateSuccess(true)
-        }).catch(err => {
+        try {
+            await newshub.submitLink({
+                url: pageUrl,
+                title: pageTitle,
+                description: pageDesc,
+                category: e.currentTarget.category.value
+            })
+        } catch (err) {
             setShowCreateFailure(true)
             console.error("Error submitting link:", err)
-        })
+        } finally {
+            setShowCreateSuccess(true)
+            e.preventDefault()
+        }
     }
 
     return (
@@ -91,12 +99,14 @@ function IndexPopup() {
                 </div>
             </Stack>
 
-            {/* FIXME: alerts do not show upon success / failure */}
             <Alert show={showCreateSuccess} onClose={() => setShowCreateSuccess(false)} variant="success" dismissible>
-                Link submitted successfully!
+                Link submitted successfully.
             </Alert>
             <Alert show={showCreateFailure} onClose={() => setShowCreateFailure(false)} variant="danger" dismissible>
-                Link submitted successfully!
+                Failed to submit link.
+            </Alert>
+            <Alert show={!isConfigured} variant="danger">
+                Extension is not properly configured.
             </Alert>
 
             <Form onSubmit={handleSubmit}>
@@ -131,7 +141,7 @@ function IndexPopup() {
                 <Form.Group controlId="categoryField">
                     <FloatingLabel label="Category">
                         <Form.Select name="category" disabled={!isConfigured}>
-                            {categories.map(cat => (
+                            {categories?.map(cat => (
                                 <option key={cat.id} value={cat.name}>{cat.name}</option>
                             ))}
                         </Form.Select>
