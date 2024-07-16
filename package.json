@@ -6,9 +6,14 @@
   "author": "Mathieu Deous",
   "private": true,
   "scripts": {
-    "dev": "plasmo dev",
-    "build": "plasmo build",
-    "package": "plasmo package"
+    "dev:chrome": "plasmo --target=chrome-mv3 dev",
+    "dev:firefox": "plasmo --target=firefox-mv2 dev",
+    "build": "plasmo --target=chrome-mv3 build && plasmo --target=firefox-mv2 build",
+    "build:chrome": "plasmo --target=chrome-mv3 build",
+    "build:firefox": "plasmo --target=firefox-mv2 build",
+    "package": "plasmo --target=chrome-mv3 package && plasmo --target=firefox-mv2 package",
+    "package:chrome": "plasmo --target=chrome-mv3 package",
+    "package:firefox": "plasmo --target=firefox-mv2 package"
   },
   "dependencies": {
     "@plasmohq/messaging": "^0.6.2",
