@@ -37,7 +37,7 @@ export class NewsHubAPI {
             body: data === null ? null : JSON.stringify(data)
         }
         const response = await fetch(`${this.apiUrl}${endpoint}`, request)
-        return await response.json();
+        return response.json();
     }
 
     async getCategories() : Promise<ApiResponse<Category>> {
