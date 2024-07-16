@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {type ChangeEvent, type FormEvent, type MouseEvent, useState} from "react";
 import {useStorage} from "@plasmohq/storage/hook";
 
 import Container from "react-bootstrap/Container";
@@ -23,7 +23,7 @@ const OptionsPage = () => {
         {api_url: "", api_token: ""}
     );
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.currentTarget;
         console.log(name, value);
         setRenderValue({
@@ -32,7 +32,7 @@ const OptionsPage = () => {
         });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
             e.preventDefault()
@@ -45,7 +45,7 @@ const OptionsPage = () => {
         e.preventDefault()
     }
 
-    const handleClearSettings = (e) => {
+    const handleClearSettings = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         e.stopPropagation()
         remove()
