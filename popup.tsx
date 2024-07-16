@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
 import FloatingLabel from "react-bootstrap/FloatingLabel"
 import Stack from "react-bootstrap/Stack"
+import Alert from "react-bootstrap/Alert"
 import {Gear} from "react-bootstrap-icons"
 
 import NewsHubAPI, {type ApiResponse, type Category} from "~newshub";
@@ -22,6 +23,8 @@ function IndexPopup() {
     const [pageDesc, setPageDesc] = useState<string>("")
     const [categories, setCategories] = useState<Category[]>([])
     const [isConfigured, setConfigured] = useState<boolean>(false)
+    const [showCreateSuccess, setShowCreateSuccess] = useState<boolean>(false)
+    const [showCreateFailure, setShowCreateFailure] = useState<boolean>(false)
     const [settings] = useStorage<Settings>(
         "settings",
         {api_url: "", api_token: ""}
@@ -62,6 +65,21 @@ function IndexPopup() {
         }
     }, [isConfigured])
 
+    const handleSubmit = (e) => {
+        const newshub = new NewsHubAPI(settings.api_url, settings.api_token)
+        newshub.submitLink({
+            url: pageUrl,
+            title: pageTitle,
+            description: pageDesc,
+            category: e.currentTarget.category.value
+        }).then((link) => {
+            setShowCreateSuccess(true)
+        }).catch(err => {
+            setShowCreateFailure(true)
+            console.error("Error submitting link:", err)
+        })
+    }
+
     return (
         <Container>
             <Stack direction="horizontal">
@@ -73,7 +91,15 @@ function IndexPopup() {
                 </div>
             </Stack>
 
-            <Form>
+            {/* FIXME: alerts do not show upon success / failure */}
+            <Alert show={showCreateSuccess} onClose={() => setShowCreateSuccess(false)} variant="success" dismissible>
+                Link submitted successfully!
+            </Alert>
+            <Alert show={showCreateFailure} onClose={() => setShowCreateFailure(false)} variant="danger" dismissible>
+                Link submitted successfully!
+            </Alert>
+
+            <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="urlField">
                     <FloatingLabel label="URL">
                         <Form.Control type="text"
@@ -104,14 +130,19 @@ function IndexPopup() {
                 </Form.Group>
                 <Form.Group controlId="categoryField">
                     <FloatingLabel label="Category">
-                        <Form.Select disabled={!isConfigured}>
+                        <Form.Select name="category" disabled={!isConfigured}>
                             {categories.map(cat => (
-                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                <option key={cat.id} value={cat.name}>{cat.name}</option>
                             ))}
                         </Form.Select>
                     </FloatingLabel>
                 </Form.Group>
-                <Button className="submitBtn" type="submit">Add link</Button>
+                <Button className="submitBtn"
+                        type="submit"
+                        disabled={!isConfigured}
+                >
+                    Add link
+                </Button>
             </Form>
         </Container>
     )
