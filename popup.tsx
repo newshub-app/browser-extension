@@ -35,7 +35,7 @@ function IndexPopup() {
         if (settings.api_url === "" || settings.api_token === "") {
             setConfigured( false)
             setCategories([])
-            console.warn("Extension is not configured. Please set the API URL and token in the settings.")
+            console.warn("Extension is not properly configured. Please set a valid API URL and token in the settings.")
         } else {
             setConfigured(true)
         }
@@ -50,7 +50,6 @@ function IndexPopup() {
                     const resp = await api.getCategories()
                     setCategories(resp.results)
                 } catch (err) {
-                    // FIXME: failure handling block never gets executed
                     console.error("Error fetching categories:", err)
                     setConfigured(false)
                 }
@@ -111,41 +110,37 @@ function IndexPopup() {
 
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="urlField">
-                    <FloatingLabel label="URL">
-                        <Form.Control type="text"
-                                      onChange={(e) => setPageUrl(e.target.value)}
-                                      value={isConfigured ? pageUrl : "Extension is not configured"}
-                                      disabled={!isConfigured}
-                        />
-                    </FloatingLabel>
+                    <Form.Label>URL</Form.Label>
+                    <Form.Control type="text"
+                                  onChange={(e) => setPageUrl(e.target.value)}
+                                  value={isConfigured ? pageUrl : ""}
+                                  disabled={!isConfigured}
+                    />
                 </Form.Group>
                 <Form.Group controlId="titleField">
-                    <FloatingLabel label="Title">
-                        <Form.Control type="text"
-                                      onChange={(e) => setPageTitle(e.target.value)}
-                                      value={isConfigured ? pageTitle : "Extension is not configured"}
-                                      disabled={!isConfigured}
-                        />
-                    </FloatingLabel>
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text"
+                                  onChange={(e) => setPageTitle(e.target.value)}
+                                  value={isConfigured ? pageTitle : ""}
+                                  disabled={!isConfigured}
+                    />
                 </Form.Group>
                 <Form.Group controlId="descField">
-                    <FloatingLabel label="Description">
-                        <Form.Control as="textarea"
-                                      onChange={(e) => setPageDesc(e.target.value)}
-                                      value={isConfigured ? pageDesc : "Extension is not configured"}
-                                      style={{height: "8em"}}
-                                      disabled={!isConfigured}
-                        />
-                    </FloatingLabel>
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control as="textarea"
+                                  onChange={(e) => setPageDesc(e.target.value)}
+                                  value={isConfigured ? pageDesc : ""}
+                                  style={{height: "8em"}}
+                                  disabled={!isConfigured}
+                    />
                 </Form.Group>
                 <Form.Group controlId="categoryField">
-                    <FloatingLabel label="Category">
+                    <Form.Label>Category</Form.Label>
                         <Form.Select name="category" disabled={!isConfigured}>
                             {categories?.map(cat => (
                                 <option key={cat.id} value={cat.name}>{cat.name}</option>
                             ))}
                         </Form.Select>
-                    </FloatingLabel>
                 </Form.Group>
                 <Button className="submitBtn"
                         type="submit"
