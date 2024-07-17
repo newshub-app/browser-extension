@@ -37,6 +37,9 @@ export class NewsHubAPI {
             body: data === null ? null : JSON.stringify(data)
         }
         const response = await fetch(`${this.apiUrl}${endpoint}`, request)
+        if (response.status >= 400) {
+            throw new Error(`Failed to query ${endpoint}: ${response.statusText}`)
+        }
         return response.json();
     }
 
