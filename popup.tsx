@@ -72,7 +72,6 @@ function IndexPopup() {
             description: pageDesc,
             category: e.currentTarget.category.value
         }).then(link => {
-            console.log("Link submitted:", link)
             setShowCreateSuccess(true)
         }).catch(err => {
             console.error("Error submitting link:", err)
@@ -148,5 +147,3 @@ function IndexPopup() {
 }
 
 export default IndexPopup
-// http://127.0.0.1:8000/api
-// 46b15947ff4ff3314ebb28cb29f3f5fb10acd11b
