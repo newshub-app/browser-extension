@@ -4,7 +4,6 @@ import {useStorage} from "@plasmohq/storage/hook";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Stack from "react-bootstrap/Stack";
 
 import {type Settings} from "~types";
@@ -56,32 +55,26 @@ const OptionsPage = () => {
             <h1>NewsHub Extension Settings</h1>
             <Form validated={formValid} onSubmit={handleSubmit}>
                 <Form.Group controlId="newshubUrl">
-                    <FloatingLabel label="NewsHub instance API URL"
-                                   controlId="newshubUrl"
-                    >
-                        <Form.Control name="api_url"
-                                      type="url"
-                                      value={settings.api_url}
-                                      onChange={handleChange}
-                                      required
-                        />
-                    </FloatingLabel>
+                    <Form.Label>NewsHub instance API URL</Form.Label>
+                    <Form.Control name="api_url"
+                                  type="url"
+                                  value={settings.api_url}
+                                  onChange={handleChange}
+                                  required
+                    />
                     <Form.Control.Feedback type="invalid">
                         Please enter a valid URL
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="apiToken">
-                    <FloatingLabel label="API Token"
-                                   controlId="newshubToken"
-                    >
-                        <Form.Control name="api_token"
-                                      type="text"
-                                      pattern="[a-f0-9]{40}"
-                                      value={settings.api_token}
-                                      onChange={handleChange}
-                                      required
-                        />
-                    </FloatingLabel>
+                    <Form.Label>API Token</Form.Label>
+                    <Form.Control name="api_token"
+                                  type="text"
+                                  pattern="[a-f0-9]{40}"
+                                  value={settings.api_token}
+                                  onChange={handleChange}
+                                  required
+                    />
                     <Form.Control.Feedback type="invalid">
                         Please enter a valid API token
                     </Form.Control.Feedback>
