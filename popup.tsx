@@ -1,3 +1,5 @@
+// noinspection HtmlUnknownTarget
+
 import {type FormEvent, useEffect, useState} from "react"
 import {sendToContentScript} from "@plasmohq/messaging"
 import {useStorage} from "@plasmohq/storage/dist/hook";
@@ -103,7 +105,7 @@ function IndexPopup() {
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="urlField">
                     <Form.Label>URL</Form.Label>
-                    <Form.Control type="text"
+                    <Form.Control type="url"
                                   onChange={(e) => setPageUrl(e.target.value)}
                                   value={isConfigured ? pageUrl : ""}
                                   disabled={!isConfigured}
