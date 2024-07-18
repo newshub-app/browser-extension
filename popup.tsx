@@ -44,18 +44,13 @@ function IndexPopup() {
     // load page info and categories
     useEffect(() => {
         if (isConfigured) {
-            const fetchCategories = async () => {
-                const api = new NewsHubAPI(settings.api_url, settings.api_token)
-                try {
-                    const resp = await api.getCategories()
-                    setCategories(resp.results)
-                } catch (err) {
-                    console.error("Error fetching categories:", err)
-                    setConfigured(false)
-                }
-            }
-            fetchCategories().then(() => null)
-
+            const api = new NewsHubAPI(settings.api_url, settings.api_token)
+            api.getCategories().then((data: Array<Category>) => {
+                setCategories(data)
+            }).catch(err => {
+                console.error("Error fetching categories:", err)
+                setConfigured(false)
+            })
 
             sendToContentScript({
                 name: "pageinfo"
@@ -71,20 +66,19 @@ function IndexPopup() {
 
     const  handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         const newshub = new NewsHubAPI(settings.api_url, settings.api_token)
-        try {
-            await newshub.submitLink({
-                url: pageUrl,
-                title: pageTitle,
-                description: pageDesc,
-                category: e.currentTarget.category.value
-            })
-        } catch (err) {
-            setShowCreateFailure(true)
-            console.error("Error submitting link:", err)
-        } finally {
+        newshub.submitLink({
+            url: pageUrl,
+            title: pageTitle,
+            description: pageDesc,
+            category: e.currentTarget.category.value
+        }).then(link => {
+            console.log("Link submitted:", link)
             setShowCreateSuccess(true)
-            e.preventDefault()
-        }
+        }).catch(err => {
+            console.error("Error submitting link:", err)
+            setShowCreateFailure(true)
+        })
+        e.preventDefault()
     }
 
     return (
@@ -154,3 +148,5 @@ function IndexPopup() {
 }
 
 export default IndexPopup
+// http://127.0.0.1:8000/api
+// 46b15947ff4ff3314ebb28cb29f3f5fb10acd11b

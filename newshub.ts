@@ -1,3 +1,5 @@
+import axios, {type AxiosInstance, type AxiosResponse} from "axios"
+
 export interface Link {
     id?: number
     url: string
@@ -18,41 +20,40 @@ export interface ApiResponse<T> {
     results: T[]
 }
 
-export class NewsHubAPI {
-    private readonly apiUrl: string
-    private readonly apiToken: string
+class NewsHubAPI {
+    private client: AxiosInstance;
 
     constructor(apiUrl: string, apiToken: string) {
-        this.apiUrl = apiUrl
-        this.apiToken = apiToken
-    }
-
-    private async request(endpoint: string, method: string = "GET", data: object = null) {
-        const request : RequestInit = {
-            method: method,
+        this.client = axios.create({
+            baseURL: apiUrl,
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.apiToken}`
-            },
-            body: data === null ? null : JSON.stringify(data)
+                Authorization: `Bearer ${apiToken}`
+            }
+        })
+    }
+
+    private async request(endpoint: string, method: string = "get", data: object = null) {
+        const response: AxiosResponse<any> = await this.client.request({
+            url: endpoint,
+            method: method,
+            data: data
+        })
+        return response.data;
+
+    }
+
+    async getCategories(): Promise<Array<Category>> {
+        const resp: ApiResponse<Category> = await this.request("/categories/")
+        if (resp.next !== null) {
+            const newPage = await this.request(resp.next)
+            return resp.results.concat(newPage.results)
         }
-        const response = await fetch(`${this.apiUrl}${endpoint}`, request)
-        if (response.status >= 400) {
-            throw new Error(`Failed to query ${endpoint}: ${response.statusText}`)
-        }
-        return response.json();
+        return resp.results
     }
 
-    async getCategories() : Promise<ApiResponse<Category>> {
-        return this.request("/category/");
-    }
-
-    async getLinks() : Promise<ApiResponse<Link>> {
-        return this.request("/link/");
-    }
-
-    async submitLink(link: Link) {
-        return this.request("/link/", "POST", link);
+    async submitLink(link: Link): Promise<Link> {
+        return this.request("/links/", "post", link)
     }
 }
 
