@@ -5,6 +5,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
+import Alert from "react-bootstrap/Alert";
 
 import {type Settings} from "~types";
 
@@ -13,6 +14,7 @@ import "~styles.css";
 
 const OptionsPage = () => {
     const [formValid, setFormValid] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false);
     const [settings, _setsettings, {
         setRenderValue,
         setStoreValue,
@@ -24,7 +26,6 @@ const OptionsPage = () => {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.currentTarget;
-        console.log(name, value);
         setRenderValue({
             ...settings,
             [name]: value,
@@ -41,6 +42,7 @@ const OptionsPage = () => {
             console.error(err)
         })
         setFormValid(true)
+        setSuccess(true)
         e.preventDefault()
     }
 
@@ -53,6 +55,11 @@ const OptionsPage = () => {
     return (
         <Container>
             <h1>NewsHub Extension Settings</h1>
+
+            <Alert show={success} onClose={() => setSuccess(false)} variant="success" dismissible>
+                Extension settings saved.
+            </Alert>
+
             <Form validated={formValid} onSubmit={handleSubmit}>
                 <Form.Group controlId="newshubUrl">
                     <Form.Label>NewsHub instance API URL</Form.Label>
@@ -82,8 +89,9 @@ const OptionsPage = () => {
                 <Stack direction="horizontal">
                     <Button className="submitBtn" type="submit">Save</Button>
                     {/* FIXME: when clearing settings the page goes blank */}
-                    <Button className="submitBtn ms-auto btn-danger" type="button" onClick={handleClearSettings}>Clear
-                        settings</Button>
+                    <Button className="submitBtn ms-auto btn-danger" type="button" onClick={handleClearSettings}>
+                        Clear settings
+                    </Button>
                 </Stack>
             </Form>
         </Container>
