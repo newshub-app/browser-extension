@@ -34,7 +34,7 @@ class NewsHubAPI {
     }
 
     private async request(endpoint: string, method: string = "get", data: object = null) {
-        const response: AxiosResponse<any> = await this.client.request({
+        const response: AxiosResponse = await this.client.request({
             url: endpoint,
             method: method,
             data: data
