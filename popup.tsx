@@ -5,12 +5,11 @@ import {useStorage} from "@plasmohq/storage/dist/hook";
 import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
-import FloatingLabel from "react-bootstrap/FloatingLabel"
 import Stack from "react-bootstrap/Stack"
 import Alert from "react-bootstrap/Alert"
 import {Gear} from "react-bootstrap-icons"
 
-import NewsHubAPI, {type ApiResponse, type Category} from "~newshub";
+import NewsHubAPI, {type Category} from "~newshub";
 import type {PageInfo} from "~types";
 import {type Settings} from "~types";
 
@@ -71,7 +70,7 @@ function IndexPopup() {
             title: pageTitle,
             description: pageDesc,
             category: e.currentTarget.category.value
-        }).then(link => {
+        }).then(() => {
             setShowCreateSuccess(true)
         }).catch(err => {
             console.error("Error submitting link:", err)
