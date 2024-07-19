@@ -34,7 +34,7 @@ function IndexPopup() {
     // load settings
     useEffect(() => {
         if (settings.api_url === "" || settings.api_token === "") {
-            setConfigured( false)
+            setConfigured(false)
             setCategories([])
             console.warn("Extension is not properly configured. Please set a valid API URL and token in the settings.")
         } else {
@@ -65,7 +65,7 @@ function IndexPopup() {
         }
     }, [isConfigured])
 
-    const  handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         const newshub = new NewsHubAPI(settings.api_url, settings.api_token)
         newshub.submitLink({
             url: pageUrl,
@@ -79,6 +79,12 @@ function IndexPopup() {
             setShowCreateFailure(true)
         })
         e.preventDefault()
+    }
+
+    const handleClear = () => {
+        setPageUrl("")
+        setPageTitle("")
+        setPageDesc("")
     }
 
     return (
@@ -130,18 +136,28 @@ function IndexPopup() {
                 </Form.Group>
                 <Form.Group controlId="categoryField">
                     <Form.Label>Category</Form.Label>
-                        <Form.Select name="category" disabled={!isConfigured}>
-                            {categories?.map(cat => (
-                                <option key={cat.id} value={cat.name}>{cat.name}</option>
-                            ))}
-                        </Form.Select>
+                    <Form.Select name="category" disabled={!isConfigured}>
+                        {categories?.map(cat => (
+                            <option key={cat.id} value={cat.name}>{cat.name}</option>
+                        ))}
+                    </Form.Select>
                 </Form.Group>
-                <Button className="submitBtn"
-                        type="submit"
-                        disabled={!isConfigured}
-                >
-                    Add link
-                </Button>
+                <Stack direction="horizontal">
+                    <Button className="submitBtn"
+                            type="submit"
+                            disabled={!isConfigured}
+                    >
+                        Add link
+                    </Button>
+                    &nbsp;
+                    <Button className="submitBtn btn-secondary"
+                            type="button"
+                            disabled={!isConfigured}
+                            onClick={handleClear}
+                    >
+                        Clear form
+                    </Button>
+                </Stack>
             </Form>
         </Container>
     )
