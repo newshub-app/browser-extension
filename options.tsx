@@ -12,16 +12,20 @@ import {type Settings} from "~types";
 import "bootstrap/dist/css/bootstrap.css";
 import "~styles.css";
 
+const DefaultSettings: Settings = {
+    api_url: "",
+    api_token: ""
+}
+
 const OptionsPage = () => {
     const [formValid, setFormValid] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
-    const [settings, _setsettings, {
+    const [settings, setsettings, {
         setRenderValue,
-        setStoreValue,
-        remove
+        setStoreValue
     }] = useStorage<Settings>(
         "settings",
-        {api_url: "", api_token: ""}
+        DefaultSettings
     );
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,27 +33,28 @@ const OptionsPage = () => {
         setRenderValue({
             ...settings,
             [name]: value,
-        });
+        })
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         const form = e.currentTarget
-        if (form.checkValidity() === false) {
-            e.preventDefault()
-            e.stopPropagation()
+        if (form.checkValidity()) {
+            setStoreValue(settings).catch(err => {
+                console.error(err)
+            })
+            setFormValid(true)
+            setSuccess(true)
         }
-        setStoreValue(settings).catch(err => {
-            console.error(err)
-        })
-        setFormValid(true)
-        setSuccess(true)
         e.preventDefault()
+        e.stopPropagation()
     }
 
     const handleClearSettings = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         e.stopPropagation()
-        remove()
+        setStoreValue(DefaultSettings).catch(err => {
+            console.error(err)
+        })
     }
 
     return (
@@ -88,14 +93,13 @@ const OptionsPage = () => {
                 </Form.Group>
                 <Stack direction="horizontal">
                     <Button className="submitBtn" type="submit">Save</Button>
-                    {/* FIXME: when clearing settings the page goes blank */}
                     <Button className="submitBtn ms-auto btn-danger" type="button" onClick={handleClearSettings}>
                         Clear settings
                     </Button>
                 </Stack>
             </Form>
         </Container>
-    );
+    )
 }
 
 export default OptionsPage
