@@ -23,7 +23,7 @@ jobs:
 
       - name: Merge PR
         if: contains(fromJSON('["version-update:semver-minor", "version-update:semver-patch"]'), steps.metadata.outputs.update-type)
-        run: gh pr review --approve --comment --body "@dependabot merge" "$PR_URL"
+        run: gh pr review --approve --body "@dependabot merge" "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
