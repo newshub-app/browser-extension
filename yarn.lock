@@ -4236,10 +4236,10 @@ pirates@^4.0.1:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
   integrity sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==
 
-plasmo@0.88.0:
-  version "0.88.0"
-  resolved "https://registry.yarnpkg.com/plasmo/-/plasmo-0.88.0.tgz#7a97c2f62740cf95c6e4dcacb1e5d12b6592814d"
-  integrity sha512-pL0xA9Y4zZuqQTyOwt0rQ8cahFMZI9toGMCa3aosB3dtzRztSe2rm3LA8hS52UdvnAUXm2A4ecmTlweaGN69Uw==
+plasmo@0.89.1:
+  version "0.89.1"
+  resolved "https://registry.yarnpkg.com/plasmo/-/plasmo-0.89.1.tgz#8b7620f1af0ddc3174fb1b2d2552072f4b057efe"
+  integrity sha512-YBSi9QeXYo9UDcbpgNI+FBC19iWs9C66ucyZpop0MaW5rc+uv/6HHzINkw+NL2izfJ8bdEU0l3iCLhpBmeKP2A==
   dependencies:
     "@expo/spawn-async" "1.7.2"
     "@parcel/core" "2.9.3"
