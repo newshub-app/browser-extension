@@ -1697,10 +1697,10 @@
     semver "7.5.4"
     vue "3.3.4"
 
-"@plasmohq/storage@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@plasmohq/storage/-/storage-1.11.0.tgz#37f913182309f572e0e5d7f481a5d019e0721589"
-  integrity sha512-JLu8cCjn+yzbaIK2Gw+NDuDJgiTle3nj1HbMC/irnnUTc7lnJSiCEN/EsUcWcwNtv9BJM2r8DAk1stsQ8dCKug==
+"@plasmohq/storage@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@plasmohq/storage/-/storage-1.13.0.tgz#1c1877dbce21c558b73a9bcf964c18d151716783"
+  integrity sha512-ceFtWFDMXg6v9nePEVyTgMusFmnMK82eNBf9ac0nN0kjMZQ+5IVEaiAgnS/c+KS43b7W+NJPpCakh+flgLOpjg==
   dependencies:
     pify "6.1.0"
 
